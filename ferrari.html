@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ferrari: The Legend | Independent Fan Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--red:#E10600;--black:#0A0A0A;--grey:#181818;--silver:#B7B7B7;--white:#F5F3EF;--d:'Anton','Impact',sans-serif;--b:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font:300 1rem/1.7 var(--b);overflow-x:hidden}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:90;opacity:.07;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+h1,h2,h3{font-family:var(--d);font-weight:400;text-transform:uppercase;line-height:.95;letter-spacing:.01em}
+.label{font:600 .72rem var(--b);letter-spacing:.3em;text-transform:uppercase;color:var(--red)}
+section{padding:7rem 5vw;position:relative}
+.light{background:var(--white);color:var(--black)}
+.light p{color:#333}
+h2{font-size:clamp(2.6rem,7vw,6rem);margin:.6rem 0 1.5rem}
+.lead{max-width:60ch;color:var(--silver)}
+.ph{position:relative;background:linear-gradient(135deg,#222,#111);overflow:hidden}
+.ph img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;object-position:center 60%;display:block;transition:transform .8s,opacity .6s;opacity:0}
+.ph img.ok{opacity:1}
+.ph::after{content:attr(data-name) " — photo unavailable";position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:1rem;font:600 .7rem var(--b);letter-spacing:.2em;text-transform:uppercase;color:#555;z-index:0}
+.ph.has::after{display:none}
+.rv{opacity:0;transform:translateY(40px);transition:opacity .9s,transform .9s}
+.rv.in{opacity:1;transform:none}
+#loader{position:fixed;inset:0;background:var(--black);z-index:200;display:grid;place-items:center;transition:opacity .6s,visibility .6s;pointer-events:none}
+#loader span{font:2rem var(--d);letter-spacing:.5em;color:var(--red);animation:pulse 1s infinite alternate}
+#loader.gone{opacity:0;visibility:hidden}
+@keyframes pulse{to{opacity:.3}}
+/* nav: blur lives on a pseudo-element so the nav never becomes the containing block for the fixed mobile menu */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.4rem 5vw;transition:padding .4s}
+nav::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(10,10,10,.92);backdrop-filter:blur(10px);border-bottom:1px solid #2a2a2a;opacity:0;transition:opacity .4s}
+nav.s{padding:.8rem 5vw}
+nav.s::before{opacity:1}
+.logo{font:1.7rem var(--d);letter-spacing:.35em}
+.logo b{color:var(--red);font-weight:400}
+nav ul{display:flex;gap:2rem;list-style:none}
+nav ul a{font:600 .7rem var(--b);letter-spacing:.25em;text-transform:uppercase;padding:.3rem 0;border-bottom:1px solid transparent;transition:.3s}
+nav ul a:hover{border-color:var(--red)}
+#burger{display:none;position:relative;z-index:2;background:none;border:0;color:var(--white);font-size:1.8rem;cursor:pointer}
+#hero{height:100vh;min-height:620px;padding:0;display:flex;align-items:flex-end;overflow:hidden}
+#hero .ph{position:absolute;inset:-8% 0;height:116%}
+#hero .ph img{object-position:center 55%}
+#hero::before{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(to top,var(--black) 5%,rgba(10,10,10,.35) 55%,rgba(10,10,10,.65))}
+.hc{position:relative;z-index:3;padding:0 5vw 9vh;max-width:1200px}
+#hero h1{font-size:clamp(3.2rem,11vw,10rem);margin:1rem 0}
+#hero h1 em{color:var(--red);font-style:normal}
+.btns{display:flex;gap:2rem;align-items:center;flex-wrap:wrap;margin-top:2rem}
+.btn{display:inline-block;background:var(--red);color:#fff;padding:1.1rem 2.4rem;font:600 .75rem var(--b);letter-spacing:.25em;text-transform:uppercase;border:0;cursor:pointer;transition:.3s}
+.btn:hover{background:#fff;color:var(--red)}
+.link{font:600 .72rem var(--b);letter-spacing:.25em;text-transform:uppercase;border-bottom:1px solid var(--red);padding-bottom:.3rem}
+.scroll{position:absolute;right:5vw;bottom:9vh;z-index:3;writing-mode:vertical-rl;font:600 .65rem var(--b);letter-spacing:.3em;text-transform:uppercase;display:flex;align-items:center;gap:1rem}
+.scroll::after{content:"";width:1px;height:70px;background:linear-gradient(var(--red),transparent);animation:drop 2s infinite}
+@keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.tl{display:flex;gap:1.5rem;overflow-x:auto;padding:2rem 0;scroll-snap-type:x mandatory;margin-top:2rem}
+.tl::-webkit-scrollbar{height:4px}.tl::-webkit-scrollbar-thumb{background:var(--red)}
+.ti{flex:0 0 min(320px,80vw);scroll-snap-align:start;border-top:2px solid #333;padding-top:1.2rem;transition:border-color .3s}
+.ti[data-go]{cursor:pointer}
+.ti:hover{border-color:var(--red)}
+.ti .yr{font:3rem var(--d);color:var(--red)}
+.ti .ph{aspect-ratio:16/10;margin:.8rem 0}
+.ti h3{font-size:1.4rem;margin-bottom:.4rem}
+.ti p{font-size:.88rem;color:var(--silver)}
+.tag{font:600 .6rem var(--b);letter-spacing:.2em;text-transform:uppercase;border:1px solid #444;padding:.15rem .5rem;display:inline-block;margin-bottom:.5rem;color:var(--silver)}
+.tag.race{border-color:var(--red);color:var(--red)}
+.filters{display:flex;gap:.6rem;flex-wrap:wrap;margin:1.5rem 0 2.5rem}
+.filters button{background:none;border:1px solid #444;color:var(--white);padding:.6rem 1.3rem;font:600 .7rem var(--b);letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:.3s}
+.filters button:hover,.filters button.on{background:var(--red);border-color:var(--red)}
+#grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:260px;grid-auto-flow:dense;gap:1rem}
+.card{position:relative;cursor:pointer;overflow:hidden;color:#fff;background:var(--grey)}
+.card.big{grid-column:span 2;grid-row:span 2}
+.card .ph{position:absolute;inset:0}
+.card:hover img,.card:focus-visible img{transform:scale(1.08)}
+.card .ov{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;padding:1.3rem;background:linear-gradient(to top,rgba(0,0,0,.92),rgba(0,0,0,.1) 60%);transition:background .4s}
+.card:hover .ov{background:linear-gradient(to top,rgba(150,0,0,.9),rgba(0,0,0,.55))}
+.card h3{font-size:1.5rem}
+.card .y{font:600 .65rem var(--b);letter-spacing:.25em;color:var(--silver);text-transform:uppercase}
+.card .more{max-height:0;overflow:hidden;font-size:.8rem;transition:max-height .4s}
+.card:hover .more,.card:focus-visible .more{max-height:80px}
+.card.hide{display:none}
+.center{text-align:center;margin-top:2.5rem}
+#modal{position:fixed;inset:0;z-index:150;background:rgba(0,0,0,.88);display:none;place-items:center;padding:1rem}
+#modal.open{display:grid}
+.mb{background:var(--grey);max-width:1000px;width:100%;max-height:92vh;overflow:auto;display:grid;grid-template-columns:1.2fr 1fr;border:1px solid #333;position:relative}
+.mb .ph{min-height:320px}
+.mi{padding:2.5rem}
+.mi h3{font-size:2.6rem;margin:.5rem 0 1rem}
+.mi dl{display:grid;grid-template-columns:auto 1fr;gap:.5rem 1.2rem;margin:1.2rem 0;font-size:.9rem}
+.mi dt{color:var(--silver);text-transform:uppercase;font:600 .65rem var(--b);letter-spacing:.2em;padding-top:.25rem}
+.note{font-size:.72rem;color:#777}
+#mx{position:absolute;top:.6rem;right:1rem;background:none;border:0;color:#fff;font-size:2rem;cursor:pointer;z-index:5}
+.drivers{display:grid;grid-template-columns:repeat(6,1fr);gap:1rem;margin:2.5rem 0}
+.dr .ph{aspect-ratio:3/4;margin-bottom:.7rem;filter:grayscale(1);transition:filter .4s}
+.dr:hover .ph{filter:none}
+.dr h3{font-size:1.1rem}.dr p{font-size:.75rem;color:var(--silver);line-height:1.4}
+.cars{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.fc .ph{aspect-ratio:16/10}.fc h3{font-size:1.3rem;margin-top:.6rem}.fc p{font-size:.8rem;color:var(--silver)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin:3rem 0;border-top:1px solid #333;border-bottom:1px solid #333;padding:2rem 0}
+.stat b{display:block;font:clamp(3rem,7vw,6rem) var(--d);color:var(--red);line-height:1}
+.stat span{font:600 .7rem var(--b);letter-spacing:.2em;text-transform:uppercase;color:var(--silver)}
+.track{width:100%;max-width:520px;margin:2rem auto 0;display:block}
+.track path{fill:none;stroke:var(--red);stroke-width:3;stroke-dasharray:1200;stroke-dashoffset:1200;transition:stroke-dashoffset 3.5s ease}
+.track.in path{stroke-dashoffset:0}
+.tele{display:flex;gap:3px;align-items:flex-end;height:50px;margin-top:1rem}
+.tele i{flex:1;background:var(--red);opacity:.7;animation:tl 1.4s infinite alternate ease-in-out}
+@keyframes tl{from{height:10%}to{height:100%}}
+.eng{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#2a2a2a;margin-top:3rem}
+.ep{background:var(--black);padding:2rem 1.5rem;transition:background .4s}
+.ep:hover{background:var(--grey)}
+.ep .n{font:600 .7rem var(--b);color:var(--red);letter-spacing:.2em}
+.ep h3{font-size:1.5rem;margin:.6rem 0}
+.ep p{font-size:.85rem;color:var(--silver)}
+.cnt{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:3rem;text-align:center}
+.cnt b{display:block;font:clamp(2.5rem,5vw,4.5rem) var(--d);color:var(--red)}
+.cnt span{font:600 .65rem var(--b);letter-spacing:.2em;text-transform:uppercase;color:var(--silver)}
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;margin-top:3rem}
+.dg.r .ph{order:2}
+.dg .ph{aspect-ratio:4/3}
+.dg h3{font-size:2.2rem;margin-bottom:.8rem}
+footer{background:#000;padding:5rem 5vw 2rem;border-top:1px solid #222}
+footer .logo{font-size:clamp(2rem,8vw,6rem)}
+.fl{display:flex;gap:2rem;flex-wrap:wrap;margin:2rem 0}
+.fl a{font:600 .7rem var(--b);letter-spacing:.2em;text-transform:uppercase;color:var(--silver)}
+.fl a:hover{color:var(--red)}
+footer small{display:block;color:#777;font-size:.75rem;max-width:80ch;margin-top:.8rem}
+footer small a{text-decoration:underline}
+#top{position:fixed;right:1.5rem;bottom:1.5rem;z-index:80;width:48px;height:48px;background:var(--red);color:#fff;border:0;font-size:1.3rem;cursor:pointer;opacity:0;visibility:hidden;transition:.3s}
+#top.v{opacity:1;visibility:visible}
+@media(max-width:1000px){#grid{grid-template-columns:repeat(2,1fr)}.drivers{grid-template-columns:repeat(3,1fr)}.cars,.stats{grid-template-columns:1fr 1fr}.eng{grid-template-columns:1fr 1fr}.mb{grid-template-columns:1fr}.dg{grid-template-columns:1fr}.dg.r .ph{order:0}}
+@media(max-width:700px){
+#burger{display:block}
+nav ul{position:fixed;inset:0 0 0 30%;z-index:1;background:var(--black);flex-direction:column;justify-content:center;padding:2rem;transform:translateX(100%);visibility:hidden;transition:transform .4s,visibility .4s;border-left:1px solid #222}
+nav ul.open{transform:none;visibility:visible}
+section{padding:5rem 6vw}
+#grid{grid-template-columns:1fr;grid-auto-rows:240px}.card.big{grid-column:auto;grid-row:auto}
+.drivers,.stats,.eng,.cnt{grid-template-columns:1fr 1fr}.cars{grid-template-columns:1fr}.scroll{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}.track path{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+<div id="loader"><span>FERRARI</span></div>
+
+<nav id="nav">
+  <a href="#hero" class="logo">F<b>E</b>RRARI</a>
+  <button id="burger" aria-label="Toggle menu" aria-expanded="false" aria-controls="menu">☰</button>
+  <ul id="menu">
+    <li><a href="#history">History</a></li><li><a href="#cars">Machines</a></li>
+    <li><a href="#f1">Formula One</a></li><li><a href="#engineering">Engineering</a></li><li><a href="#design">Design</a></li>
+  </ul>
+</nav>
+
+<header id="hero">
+  <div class="ph" data-wiki="Ferrari_F40" data-name="Ferrari F40" id="heroimg"></div>
+  <div class="hc">
+    <span class="label">Maranello · Italia · Since 1947</span>
+    <h1>Born to race.<br><em>Built to inspire.</em></h1>
+    <p class="lead">Eight decades of speed, engineering and Italian craftsmanship, from a small workshop in Maranello to the most coveted name in motorsport.</p>
+    <div class="btns"><a href="#history" class="btn">Explore the Legend</a><a href="#cars" class="link">Discover the Machines</a></div>
+  </div>
+  <div class="scroll">Scroll</div>
+</header>
+
+<section id="history">
+  <span class="label rv">01 — Timeline</span>
+  <h2 class="rv">Eighty years of Rosso</h2>
+  <p class="lead rv">Racing milestones and road-car launches are tagged separately. Click a road-car milestone to jump to its model.</p>
+  <div class="tl" id="tl"></div>
+</section>
+
+<section id="cars" style="background:var(--grey)">
+  <span class="label rv">02 — The Museum</span>
+  <h2 class="rv">Twenty legendary machines</h2>
+  <p class="lead rv">From pure racers to modern hypercars, listed by debut year. Figures are approximate and manufacturer-quoted where available; classic-era top speeds are period or estimated and vary by version and market.</p>
+  <div class="filters" id="filters" role="group" aria-label="Filter cars"></div>
+  <div id="grid"></div>
+  <div class="center"><button class="btn" id="viewall">View All Legends</button></div>
+</section>
+
+<section id="f1">
+  <span class="label rv">03 — Scuderia Ferrari</span>
+  <h2 class="rv">Formula One</h2>
+  <p class="lead rv">Founded by Enzo Ferrari in 1929, Scuderia Ferrari is the only team to have competed in every Formula One World Championship season since 1950. Racing red (<i>Rosso Corsa</i>) was Italy's international racing colour in the early Grand Prix era, and it became Ferrari's signature.</p>
+  <div class="stats rv">
+    <div class="stat"><b data-to="16">0</b><span>Constructors' titles (last: 2008)</span></div>
+    <div class="stat"><b data-to="15">0</b><span>Drivers' titles (last: 2007)</span></div>
+    <div class="stat"><b data-to="1950" data-plain>0</b><span>Debut season</span></div>
+  </div>
+  <p class="note rv">Championship counts are accurate through the 2025 season; drivers' and constructors' titles are listed separately.</p>
+  <h3 class="rv" style="font-size:2rem;margin-top:3rem">Legendary drivers</h3>
+  <div class="drivers rv" id="drivers"></div>
+  <h3 class="rv" style="font-size:2rem">Iconic racing machines</h3>
+  <div class="cars rv" id="f1cars" style="margin-top:1.5rem"></div>
+  <div class="dg rv" style="margin-top:4rem">
+    <div>
+      <h3>Track to road</h3>
+      <p class="lead">Paddle-shift gearboxes, hybrid energy recovery, carbon-fibre monocoques, active aerodynamics and engine-mapping know-how all moved from the circuit into production cars: the LaFerrari, SF90 Stradale and F80 are direct descendants of that exchange.</p>
+      <div class="tele" aria-hidden="true" id="tele"></div>
+    </div>
+    <svg class="track rv" viewBox="0 0 400 240" role="img" aria-label="Stylised circuit outline"><path d="M60 180 C20 150 40 90 90 80 L180 70 C230 60 250 20 300 40 C360 60 370 130 320 150 L260 160 C220 170 230 210 180 210 L100 205 C80 203 70 195 60 180Z"/></svg>
+  </div>
+</section>
+
+<section id="engineering" style="background:var(--grey)">
+  <span class="label rv">04 — Technology</span>
+  <h2 class="rv">Engineered for emotion</h2>
+  <div class="eng rv">
+    <div class="ep"><span class="n">01</span><h3>Naturally aspirated V12</h3><p>Ferrari's founding configuration: linear power delivery and an unmistakable voice, carried through the 812 Competizione and Daytona SP3.</p></div>
+    <div class="ep"><span class="n">02</span><h3>High-revving V8</h3><p>From the 458 Italia's naturally aspirated 4.5-litre to the turbocharged 488 Pista, the mid-engine V8 defines the modern Ferrari.</p></div>
+    <div class="ep"><span class="n">03</span><h3>Hybrid power</h3><p>LaFerrari, SF90 Stradale, 296 GTB and F80 pair combustion engines with electric motors for power and efficiency.</p></div>
+    <div class="ep"><span class="n">04</span><h3>Aero &amp; downforce</h3><p>Underbody tunnels, active flaps and carefully shaped surfaces turn airflow into grip without sacrificing beauty.</p></div>
+    <div class="ep"><span class="n">05</span><h3>Carbon fibre</h3><p>Pioneered in road cars with the F40's composite body and refined into full carbon monocoques from the Enzo onward.</p></div>
+    <div class="ep"><span class="n">06</span><h3>F1-derived tech</h3><p>Paddle-shift gearboxes, manettino controls and the steering-wheel-mounted engine start all carry racing DNA.</p></div>
+    <div class="ep"><span class="n">07</span><h3>Sound</h3><p>Engine notes are tuned as carefully as performance: the exhaust is part of the instrument.</p></div>
+    <div class="ep"><span class="n">08</span><h3>Driver engagement</h3><p>Compact controls, direct steering and a focused cockpit keep the driver at the centre.</p></div>
+  </div>
+  <div class="cnt rv">
+    <div><b data-to="830">0</b><span>hp · 812 Competizione</span></div>
+    <div><b data-to="9500">0</b><span>rpm limit · 812 Competizione</span></div>
+    <div><b data-to="986">0</b><span>hp · SF90 Stradale</span></div>
+    <div><b data-to="1184">0</b><span>hp · F80 (combined)</span></div>
+  </div>
+  <p class="note rv" style="margin-top:1rem;text-align:center">Manufacturer-quoted figures; hybrid outputs are combined system power.</p>
+</section>
+
+<section id="design" class="light">
+  <span class="label rv">05 — Form follows speed</span>
+  <h2 class="rv">The Ferrari design philosophy</h2>
+  <div class="dg rv">
+    <div class="ph" data-wiki="Ferrari_250_GTO" data-name="Ferrari 250 GTO"></div>
+    <div><h3>The evolving silhouette</h3><p>Long bonnets and rear-set cabins of the 1960s gave way to the wedge-shaped mid-engine stance, and today's cars blend sculpted surfaces with active aerodynamics. Every line serves airflow as much as emotion.</p></div>
+  </div>
+  <div class="dg r rv">
+    <div class="ph" data-wiki="Ferrari_Testarossa" data-name="Ferrari Testarossa"></div>
+    <div><h3>Pininfarina &amp; Italian coachbuilding</h3><p>Pininfarina shaped most Ferrari road cars from the 1950s onward, a partnership that produced the Dino, Daytona, Testarossa and F40. Since 2010 the in-house Ferrari Design Centre has led design, while Pininfarina remains a historic collaborator.</p></div>
+  </div>
+  <div class="dg rv">
+    <div class="ph" data-wiki="Ferrari_Daytona_SP3" data-name="Ferrari Daytona SP3"></div>
+    <div><h3>The Prancing Horse</h3><p>The <i>Cavallino Rampante</i> was the emblem of Italian WWI fighter ace Francesco Baracca. Enzo Ferrari adopted it, on a canary-yellow shield for Modena, after meeting Baracca's parents. Rosso Corsa completes the identity: red for Italian racing, a century on.</p></div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">F<b style="color:var(--red)">E</b>RRARI</div>
+  <p class="lead" style="margin-top:1rem">A tribute to the people, machines and moments that made Maranello a legend.</p>
+  <div class="fl"><a href="#history">History</a><a href="#cars">Machines</a><a href="#f1">Formula One</a><a href="#engineering">Engineering</a><a href="#design">Design</a></div>
+  <small>This is an independent, fan-made educational project and is not affiliated with, endorsed by, or an official website of Ferrari S.p.A.</small>
+  <small>Ferrari, the Prancing Horse and all vehicle names, logos and trademarks belong to their respective owners.</small>
+  <small>Images: lead photographs from the corresponding <a href="https://en.wikipedia.org" target="_blank" rel="noopener">Wikipedia</a> articles, hosted on <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a> under their individual open licences. Click through to Commons for photographer credits.</small>
+</footer>
+
+<button id="top" aria-label="Back to top">↑</button>
+
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="mt">
+  <div class="mb"><button id="mx" aria-label="Close">×</button><div class="ph" id="mimg"></div><div class="mi" id="mi"></div></div>
+</div>
+
+<script>
+(()=>{
+/* Wikipedia lead photos are fetched at runtime. For variants (488 Pista, F12tdf, 812 Competizione)
+   the photo may show the base model of that article. */
+const CARS=[
+ {n:"Ferrari 250 GTO",y:1962,w:"Ferrari_250_GTO",c:["Classic","V12","Special Series"],e:"3.0L V12",hp:"~300 hp",s:"~280 km/h (est.)",d:"Homologation racer that won its class at Le Mans and dominated GT racing; only 36 were built, and it is among the most valuable cars ever sold."},
+ {n:"Ferrari 250 Testa Rossa",y:1957,w:"Ferrari_250_Testa_Rossa",c:["Classic","V12"],e:"3.0L V12",hp:"~300 hp",s:"~270 km/h (est.)",d:"A pure race car named for its red-painted cam covers. It won the 24 Hours of Le Mans multiple times and defined late-1950s sports-car racing."},
+ {n:"Ferrari 275 GTB",y:1964,w:"Ferrari_275",c:["Classic","V12"],e:"3.3L V12",hp:"~280 hp",s:"~250 km/h (est.)",d:"Introduced independent rear suspension and a transaxle to Ferrari road cars, wrapped in a celebrated Pininfarina body."},
+ {n:"Ferrari Daytona 365 GTB/4",y:1968,w:"Ferrari_365_GTB/4",c:["Classic","V12"],e:"4.4L V12",hp:"~352 hp",s:"~280 km/h (est.)",d:"The last great front-engined V12 berlinetta of its era, nicknamed 'Daytona' after Ferrari's 1967 1-2-3 finish there."},
+ {n:"Dino 246 GT",y:1969,w:"Dino_246",c:["Classic"],e:"2.4L V6",hp:"~195 hp",s:"~235 km/h (est.)",d:"A lightweight, mid-engine V6 sports car sold under the Dino name, honouring Enzo Ferrari's late son Alfredo."},
+ {n:"Ferrari 288 GTO",y:1984,w:"Ferrari_288_GTO",c:["V8","Special Series"],e:"2.9L twin-turbo V8",hp:"~400 hp",s:"~305 km/h (est.)",d:"Built to homologate a Group B racing programme, it was the first Ferrari to be called a GTO since the 250 and the forerunner of the F40."},
+ {n:"Ferrari F40",y:1987,w:"Ferrari_F40",c:["V8","Special Series"],e:"2.9L twin-turbo V8",hp:"478 hp",s:"324 km/h",d:"The last Ferrari approved by Enzo Ferrari himself, and the first production road car to exceed 200 mph. Raw, light and unfiltered."},
+ {n:"Ferrari F50",y:1995,w:"Ferrari_F50",c:["V12","Special Series"],e:"4.7L V12",hp:"513 hp",s:"325 km/h",d:"A Formula One-derived V12 mounted as a stressed member behind the driver, with a carbon-fibre monocoque, for the brand's 50th anniversary."},
+ {n:"Ferrari 550 Maranello",y:1996,w:"Ferrari_550_Maranello",c:["V12"],e:"5.5L V12",hp:"485 hp",s:"~320 km/h",d:"Returned the V12 to the front of the car, proving that a grand tourer could be both exciting and usable."},
+ {n:"Enzo Ferrari",y:2002,w:"Enzo_Ferrari_(automobile)",c:["V12","Special Series"],e:"6.0L V12",hp:"651 hp",s:"350+ km/h",d:"Named for the founder, it brought F1 technology to the road, including a carbon monocoque and paddle-shift gearbox. 400 were built."},
+ {n:"Ferrari 458 Italia",y:2009,w:"Ferrari_458",c:["V8"],e:"4.5L V8",hp:"562 hp",s:"325+ km/h",d:"Widely regarded as the high point of the naturally aspirated mid-engine V8, a screaming 9,000 rpm engine in a razor-sharp chassis."},
+ {n:"LaFerrari",y:2013,w:"LaFerrari",c:["V12","Hybrid","Special Series"],e:"6.3L V12 + HY-KERS",hp:"963 hp (combined)",s:"350+ km/h",d:"Ferrari's first hybrid hypercar, uniting a V12 with an F1-derived KERS system. 499 coupés were made, plus the Aperta spider."},
+ {n:"Ferrari F12tdf",y:2015,w:"Ferrari_F12berlinetta",c:["V12","Special Series"],e:"6.3L V12",hp:"770 hp",s:"340+ km/h",d:"The 'Tour de France' special, a lighter, sharper, rear-steering V12 limited to 799. Photo may show the standard F12berlinetta."},
+ {n:"Ferrari 488 Pista",y:2018,w:"Ferrari_488",c:["V8","Special Series"],e:"3.9L twin-turbo V8",hp:"710 hp",s:"340+ km/h",d:"A track-focused version of the 488 GTB with F1-inspired aerodynamics and engine tech. Article photo may show the base 488."},
+ {n:"Ferrari SF90 Stradale",y:2019,w:"Ferrari_SF90_Stradale",c:["V8","Hybrid"],e:"4.0L twin-turbo V8 + 3 e-motors",hp:"986 hp (combined)",s:"340 km/h",d:"Ferrari's first series-production plug-in hybrid, with all-wheel drive from front electric motors."},
+ {n:"Ferrari 812 Competizione",y:2021,w:"Ferrari_812_Superfast",c:["V12","Special Series"],e:"6.5L V12",hp:"830 hp",s:"340+ km/h",d:"The most powerful naturally aspirated Ferrari of its generation, revving to 9,500 rpm. Photo may show the 812 Superfast."},
+ {n:"Ferrari Daytona SP3",y:2021,w:"Ferrari_Daytona_SP3",c:["V12","Special Series"],e:"6.5L V12",hp:"829 hp",s:"340+ km/h",d:"Part of the Icona series, inspired by 1960s prototype racers like the 330 P3/4. Limited to 599 units."},
+ {n:"Ferrari 296 GTB",y:2021,w:"Ferrari_296_GTB",c:["Hybrid"],e:"3.0L twin-turbo V6 + e-motor",hp:"818 hp (combined)",s:"330 km/h",d:"A 120° V6 plug-in hybrid that revived Ferrari's V6 heritage. Revealed in 2021, with deliveries from 2022."},
+ {n:"Ferrari Purosangue",y:2022,w:"Ferrari_Purosangue",c:["V12"],e:"6.5L V12",hp:"715 hp",s:"310+ km/h",d:"Ferrari's first four-door, four-seat model, with a naturally aspirated V12 and active suspension."},
+ {n:"Ferrari F80",y:2024,w:"Ferrari_F80",c:["Hybrid","Special Series"],e:"3.0L twin-turbo V6 + e-motors",hp:"1,184 hp (combined)",s:"350 km/h",d:"Ferrari's flagship halo hypercar, successor to the Enzo and LaFerrari, drawing on its World Endurance Championship programme. Limited to 799."}
+].sort((a,b)=>a.y-b.y);
+const TL=[
+ {y:"1929",t:"The Beginning",k:"Racing",w:"Scuderia_Ferrari",d:"Enzo Ferrari founds Scuderia Ferrari to race Alfa Romeo cars."},
+ {y:"1947",t:"The First Ferrari",k:"Road car",w:"Ferrari_125_S",d:"The 125 S, powered by a 1.5L V12, is the first car to carry the Ferrari name."},
+ {y:"1950",t:"Formula One",k:"Racing",w:"Scuderia_Ferrari",d:"Ferrari enters the inaugural Formula One World Championship."},
+ {y:"1962",t:"The 250 GTO",k:"Road car",go:"Ferrari 250 GTO",w:"Ferrari_250_GTO",d:"One of the most celebrated and valuable cars in history."},
+ {y:"1984",t:"The 288 GTO",k:"Road car",go:"Ferrari 288 GTO",w:"Ferrari_288_GTO",d:"A landmark homologation special."},
+ {y:"1987",t:"The F40",k:"Road car",go:"Ferrari F40",w:"Ferrari_F40",d:"Created to celebrate Ferrari's 40th anniversary."},
+ {y:"2002",t:"Enzo Ferrari",k:"Road car",go:"Enzo Ferrari",w:"Enzo_Ferrari_(automobile)",d:"A supercar built with Formula One-inspired engineering."},
+ {y:"2013",t:"LaFerrari",k:"Road car",go:"LaFerrari",w:"LaFerrari",d:"Ferrari's first hybrid hypercar."},
+ {y:"2022",t:"296 GTB & the modern era",k:"Road car",go:"Ferrari 296 GTB",w:"Ferrari_296_GTB",d:"Revealed 2021, delivered 2022: a new generation of hybrid performance."},
+ {y:"2023",t:"The SF-23",k:"Racing",w:"Ferrari_SF-23",d:"Ferrari's Formula One challenger for the 2023 season."},
+ {y:"2024",t:"The F80",k:"Road car",go:"Ferrari F80",w:"Ferrari_F80",d:"A new-generation hypercar carrying the Enzo and LaFerrari tradition forward."}
+];
+const DRV=[["Michael Schumacher","Michael_Schumacher","5 titles with Ferrari, 2000–04"],["Niki Lauda","Niki_Lauda","Ferrari champion 1975 and 1977"],["Gilles Villeneuve","Gilles_Villeneuve","Fearless Ferrari icon, 1977–82"],["Kimi Räikkönen","Kimi_Räikkönen","Ferrari champion 2007"],["Fernando Alonso","Fernando_Alonso","Ferrari driver 2010–14"],["Charles Leclerc","Charles_Leclerc","Ferrari driver since 2019"]];
+const F1C=[["Ferrari 312T","Ferrari_312T","Transverse-gearbox design that won titles in 1975 and 1977."],["Ferrari F2004","Ferrari_F2004","Dominant Schumacher-era car of 2004."],["Ferrari F2007","Ferrari_F2007","Räikkönen's title-winning car of 2007."],["Ferrari F2008","Ferrari_F2008","Won Ferrari's most recent constructors' title, in 2008."],["Ferrari SF71H","Ferrari_SF71H","Race-winning 2018 car driven by Vettel and Räikkönen."],["Ferrari SF-23","Ferrari_SF-23","Ferrari's 2023 F1 car, driven by Leclerc and Sainz."]];
+
+/* ===== IMAGE LOADER ===== */
+const cache={};
+function loadWiki(box){
+  const t=box.dataset.wiki; if(!t||box.querySelector("img"))return;
+  const img=document.createElement("img");
+  img.alt=(box.dataset.name||t.replace(/_/g," "))+" photograph"; img.loading="lazy"; img.decoding="async";
+  box.appendChild(img);
+  (cache[t]=cache[t]||fetch("https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(t)).then(r=>r.ok?r.json():Promise.reject()).then(j=>{
+    const o=j.originalimage,th=j.thumbnail;
+    if(!th&&!o)return null;
+    /* Wikimedia refuses thumbnails wider than the original, so only upscale-request when the original is big enough */
+    return (o&&(o.width<1280||!th))?o.source:th.source.replace(/\/\d+px-/,"/1280px-");
+  }))
+   .then(u=>{if(!u)throw 0;img.onload=()=>{img.classList.add("ok");box.classList.add("has")};img.onerror=()=>img.remove();img.src=u})
+   .catch(()=>img.remove());
+}
+const io2=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){loadWiki(e.target);io2.unobserve(e.target)}}),{rootMargin:"300px"});
+const watch=(root=document)=>root.querySelectorAll(".ph[data-wiki]").forEach(b=>io2.observe(b));
+
+/* ===== BUILD UI ===== */
+const $=s=>document.querySelector(s);
+const ph=(w,n)=>`<div class="ph" data-wiki="${w}" data-name="${n}"></div>`;
+$("#tl").innerHTML=TL.map(t=>`<div class="ti" ${t.go?`data-go="${t.go}" tabindex="0" role="button"`:""}><div class="yr">${t.y}</div><span class="tag ${t.k=="Racing"?"race":""}">${t.k}</span>${ph(t.w,t.t)}<h3>${t.t}</h3><p>${t.d}</p></div>`).join("");
+$("#drivers").innerHTML=DRV.map(d=>`<div class="dr">${ph(d[1],d[0])}<h3>${d[0]}</h3><p>${d[2]}</p></div>`).join("");
+$("#f1cars").innerHTML=F1C.map(c=>`<div class="fc">${ph(c[1],c[0])}<h3>${c[0]}</h3><p>${c[2]}</p></div>`).join("");
+$("#tele").innerHTML=Array.from({length:40},(_,i)=>`<i style="animation-delay:${(i*.11).toFixed(2)}s;animation-duration:${(1+(i%7)*.2).toFixed(1)}s"></i>`).join("");
+
+const cats=["All","Classic","V8","V12","Hybrid","Special Series"];
+let cur="All",all=false;
+$("#filters").innerHTML=cats.map(c=>`<button data-c="${c}" class="${c=="All"?"on":""}">${c}</button>`).join("");
+$("#grid").innerHTML=CARS.map((c,i)=>`<div class="card" role="button" tabindex="0" data-i="${i}" aria-label="${c.n}, details">${ph(c.w,c.n)}<div class="ov"><span class="y">Debut ${c.y}</span><h3>${c.n}</h3><div class="more">${c.e} · ${c.hp}</div></div></div>`).join("");
+function apply(){
+  let seen=0,vis=0;
+  document.querySelectorAll(".card").forEach((el,i)=>{
+    const m=cur=="All"||CARS[i].c.includes(cur);
+    if(m)seen++;
+    const ok=m&&(all||cur!="All"||seen<=9);
+    el.classList.toggle("hide",!ok);
+    el.classList.toggle("big",ok&&vis%5==0); /* feature tile chosen by visible position, so filtering never leaves holes */
+    if(ok)vis++;
+  });
+  $("#viewall").style.display=(cur=="All"&&!all)?"":"none";
+  watch($("#grid"));
+}
+$("#filters").onclick=e=>{const b=e.target.closest("button");if(!b)return;cur=b.dataset.c;document.querySelectorAll("#filters button").forEach(x=>x.classList.toggle("on",x==b));apply()};
+$("#viewall").onclick=()=>{all=true;apply()};
+
+/* ===== MODAL ===== */
+let last;
+function openCar(i){
+  const c=CARS[i];last=document.activeElement;
+  const m=$("#mimg");m.dataset.wiki=c.w;m.dataset.name=c.n;m.className="ph";m.innerHTML="";loadWiki(m);
+  $("#mi").innerHTML=`<span class="label">${c.c.join(" · ")}</span><h3 id="mt">${c.n}</h3><p>${c.d}</p><dl><dt>Debut</dt><dd>${c.y}</dd><dt>Engine</dt><dd>${c.e}</dd><dt>Power</dt><dd>${c.hp}</dd><dt>Top speed</dt><dd>${c.s}</dd></dl><p class="note">Approximate figures; manufacturer-quoted where available, estimated for classics. Values vary by version and market.</p>`;
+  $("#modal").classList.add("open");$("#mx").focus();document.body.style.overflow="hidden";
+}
+function closeM(){$("#modal").classList.remove("open");document.body.style.overflow="";last&&last.focus()}
+const act=(e,fn)=>{if(e.type=="click"||e.key=="Enter"||e.key==" "){if(e.key)e.preventDefault();fn()}};
+const cardHandler=e=>{const c=e.target.closest(".card");if(c)act(e,()=>openCar(+c.dataset.i))};
+$("#grid").addEventListener("click",cardHandler);
+$("#grid").addEventListener("keydown",cardHandler);
+$("#mx").onclick=closeM;
+$("#modal").onclick=e=>{if(e.target.id=="modal")closeM()};
+addEventListener("keydown",e=>{
+  if(!$("#modal").classList.contains("open"))return;
+  if(e.key=="Escape")closeM();
+  if(e.key=="Tab"){e.preventDefault();$("#mx").focus()} /* the close button is the only focusable control: keep focus inside the dialog */
+});
+function goTo(name){
+  const i=CARS.findIndex(c=>c.n==name);if(i<0)return;
+  cur="All";all=true;document.querySelectorAll("#filters button").forEach(x=>x.classList.toggle("on",x.dataset.c=="All"));apply();
+  $("#cars").scrollIntoView({behavior:"smooth"});setTimeout(()=>openCar(i),600);
+}
+const tlHandler=e=>{const t=e.target.closest(".ti");if(t&&t.dataset.go)act(e,()=>goTo(t.dataset.go))};
+$("#tl").addEventListener("click",tlHandler);
+$("#tl").addEventListener("keydown",tlHandler);
+
+/* ===== NAV, SCROLL, PARALLAX ===== */
+const nav=$("#nav"),topBtn=$("#top"),himg=$("#heroimg"),menu=$("#menu"),burger=$("#burger"),reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+addEventListener("scroll",()=>{
+  const y=scrollY;nav.classList.toggle("s",y>60);topBtn.classList.toggle("v",y>900);
+  if(!reduce&&y<innerHeight)himg.style.transform=`translateY(${y*.25}px)`;
+},{passive:true});
+topBtn.onclick=()=>scrollTo({top:0,behavior:"smooth"});
+function setMenu(o){menu.classList.toggle("open",o);burger.setAttribute("aria-expanded",o);burger.textContent=o?"✕":"☰"}
+burger.onclick=()=>setMenu(!menu.classList.contains("open"));
+menu.onclick=e=>{if(e.target.tagName=="A")setMenu(false)};
+addEventListener("keydown",e=>{if(e.key=="Escape"&&menu.classList.contains("open")){setMenu(false);burger.focus()}});
+
+/* ===== REVEAL + COUNTERS ===== */
+function count(el){
+  const to=+el.dataset.to,plain=el.hasAttribute("data-plain"),t0=performance.now(),dur=reduce?1:1600;
+  (function f(t){const p=Math.min((t-t0)/dur,1),v=Math.round(to*(1-Math.pow(1-p,3)));el.textContent=plain?v:v.toLocaleString("en-US");if(p<1)requestAnimationFrame(f)})(t0);
+}
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add("in");e.target.querySelectorAll("[data-to]").forEach(count);io.unobserve(e.target)}
+}),{threshold:.15});
+document.querySelectorAll(".rv").forEach(el=>io.observe(el));
+
+/* ===== INIT ===== */
+loadWiki(himg);watch();apply();
+addEventListener("load",()=>setTimeout(()=>$("#loader").classList.add("gone"),500));
+setTimeout(()=>$("#loader").classList.add("gone"),2500);
+})();
+</script>
+</body>
+</html>
